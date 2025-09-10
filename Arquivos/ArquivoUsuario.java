@@ -8,7 +8,7 @@ import aed3.Arquivo;
 
 public class ArquivoUsuario extends Arquivo{
 
-    RandomAccessFile arquivo;}
+    RandomAccessFile arquivo;
 
     public ArquivoUsuario() throws Exception {
         super("usuario", Usuario.class.getConstructor());

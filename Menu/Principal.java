@@ -27,7 +27,8 @@ public class Principal {
                 switch (option) {
                     case 0:
                         break;
-                    case 1:
+                    case 1: System.out.println("Digite o nome do usuário: "); String name = scanner.nextLine(); System.out.println("Digite a senha: ");
+                    String senha = scanner.nextLine();
                         
                 
                     default:
@@ -37,5 +38,13 @@ public class Principal {
             } while(option != 0);
         }
         scanner.close();
+    }
+
+    public void logar() {
+
+    }
+
+    public int registrar() {
+        
     }
 }
