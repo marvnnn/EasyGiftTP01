@@ -1,15 +1,14 @@
 package Menu;
 
 import java.util.Scanner;
-import Arquivos.*;
 
 public class Principal {
     public static void main(String[] args) {
-        Scanner scanner;
-        ArquivoUsuario arqUsu = new ArquivoUsuario();
 
         try {
-            scanner = new Scanner(System.in);
+            Scanner scanner = new Scanner(System.in);
+            MenuUsuario menuUsu = new MenuUsuario();
+
             int option;
             do {
                 System.out.println("\n\nEasyGift 1.0");
@@ -21,30 +20,27 @@ public class Principal {
                 System.out.println("2 - Registrar-se");
 
                 System.out.print("\nOpção: ");
-
-                option = scanner.nextInt();
+                option = Integer.parseInt(scanner.nextLine());
 
                 switch (option) {
                     case 0:
+                        System.out.println("Saindo...");
                         break;
-                    case 1: System.out.println("Digite o nome do usuário: "); String name = scanner.nextLine(); System.out.println("Digite a senha: ");
-                    String senha = scanner.nextLine();
-                        
-                
+                    case 1:
+                        menuUsu.logar();
+                        break;
+                    case 2:
+                        menuUsu.registrar();
+                        break;
                     default:
+                        System.out.println("Opção inválida!");
                         break;
                 }
 
             } while(option != 0);
+
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
         }
-        scanner.close();
-    }
-
-    public void logar() {
-
-    }
-
-    public int registrar() {
-        
     }
 }

@@ -245,5 +245,18 @@ public class Arquivo<T extends Registro> {
         indiceDireto.close();
     }
 
+    public int totalUsuariosNoArquivo() throws Exception {
+    int total = 0;
+    arquivo.seek(12); // pula o cabeçalho
+    while (arquivo.getFilePointer() < arquivo.length()) {
+        byte lapide = arquivo.readByte();
+        short tam = arquivo.readShort();
+        if (lapide == ' ') {
+            total++;
+        }
+        arquivo.skipBytes(tam);
+    }
+    return total;
+}
 
 }
