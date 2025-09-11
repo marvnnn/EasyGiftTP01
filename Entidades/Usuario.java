@@ -82,4 +82,7 @@ public class Usuario implements Registro  {
     public int getId() {
         return this.id;
     }
+
+
+    
 }

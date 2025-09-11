@@ -2,9 +2,11 @@ package Arquivos;
 
 import Entidades.*;
 import java.io.*;
+import java.util.ArrayList;
 
 import Entidades.Usuario;
 import aed3.Arquivo;
+import aed3.ParIDEndereco;
 
 public class ArquivoUsuario extends Arquivo<Usuario> {
 
@@ -22,4 +24,14 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
         }
 
     }
+
+    public ArrayList<Integer> getIds() throws Exception {
+        return super.getIndiceDireto().getTodosIds();
+    }
+
+
+
+
+   
+
 }

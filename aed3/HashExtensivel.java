@@ -488,4 +488,38 @@ public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
     arqDiretorio.close();
     arqCestos.close();
   }
+
+  
+  public ArrayList<Integer> getTodosIds() throws Exception {
+    ArrayList<Integer> ids = new ArrayList<>();
+
+    // Carrega o diretório
+    byte[] bd = new byte[(int) arqDiretorio.length()];
+    arqDiretorio.seek(0);
+    arqDiretorio.read(bd);
+    diretorio = new Diretorio();
+    diretorio.fromByteArray(bd);
+
+    // Percorre todos os cestos indicados pelo diretório
+    for (int i = 0; i < diretorio.enderecos.length; i++) {
+        long enderecoCesto = diretorio.enderecos[i];
+        if (enderecoCesto >= 0 && enderecoCesto < arqCestos.length()) {
+            Cesto c = new Cesto(construtor, quantidadeDadosPorCesto);
+            byte[] ba = new byte[c.size()];
+            arqCestos.seek(enderecoCesto);
+            arqCestos.read(ba);
+            c.fromByteArray(ba);
+
+            // Para cada elemento válido no cesto
+            for (int j = 0; j < c.quantidade; j++) {
+                T elem = c.elementos.get(j);
+                if (elem != null && elem.hashCode() != 0) { // ou outra validação de elemento válido
+                    ids.add(elem.hashCode()); // ou elem.getId() se você tiver
+                }
+            }
+        }
+    }
+
+    return ids;
+}
 }

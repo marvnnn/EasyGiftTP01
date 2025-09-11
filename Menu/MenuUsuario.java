@@ -1,6 +1,7 @@
 package Menu;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import Arquivos.ArquivoUsuario;
@@ -17,16 +18,35 @@ public class MenuUsuario {
     }
 
     public Usuario buscarPorNomeESenha(String nome, String senha) throws Exception {
-        int totalUsuarios = arqUsu.totalUsuariosNoArquivo();
-       System.out.println("totla de usuarios" + totalUsuarios);
-        for (int id = 1; id <= totalUsuarios; id++) {
-            Usuario u = arqUsu.read(id); // lê cada usuário pelo seu ID
-            if (u != null && u.getName().trim().equalsIgnoreCase(nome.trim()) && u.getPasswordHash().trim().equals(senha.trim()))  {
-                return u; // encontrado
+        ArrayList<Integer> ids = arqUsu.getIds(); // pega todos os ids do índice
+        for (int id : ids) {
+            System.out.println("buscando id: " + id);
+            Usuario u = arqUsu.read(id);
+            if (u != null) {
+                System.out.println("usuario: " + u.getName() + " senha: " + u.getPasswordHash());
+                if (u.getName().trim().equalsIgnoreCase(nome.trim())
+                        && u.getPasswordHash().trim().equals(senha.trim())) {
+                    return u; // encontrado
+                }
             }
         }
         return null; // usuário não encontrado
     }
+
+    public Usuario buscarPorid() throws Exception {
+
+        ArrayList<Integer> ids = arqUsu.getIds(); // pega todos os ids do índice
+        System.out.println("ids: " + ids);
+
+        arqUsu.testarIndice(1);
+
+        Usuario u = arqUsu.read(1);
+
+        return u; // usuário não encontrado
+
+    }
+
+    
 
     public void logar() {
 
@@ -36,7 +56,7 @@ public class MenuUsuario {
         String senha = console.nextLine();
 
         try {
-            Usuario u = buscarPorNomeESenha(name, senha);
+            Usuario u = buscarPorid();
             if (u != null) {
                 System.out.println("Login bem sucedido! Bem-vindo, " + u.getName());
             } else {
