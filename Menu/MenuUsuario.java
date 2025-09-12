@@ -12,12 +12,13 @@ import Entidades.Lista;
 
 public class MenuUsuario {
     ArquivoUsuario arqUsu;
-
     private static Scanner console;
+    MenuLista menuLista;
 
     public MenuUsuario() throws Exception {
         arqUsu = new ArquivoUsuario();
         console = new Scanner(System.in);
+        menuLista = new MenuLista();
     }
 
     public Usuario buscarPorNomeESenha(String nome, String senha) throws Exception {
@@ -73,5 +74,36 @@ public class MenuUsuario {
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar usuário: " + e.getMessage());
         }
+    }
+
+    public void menuUsuario() {
+        int opcao;
+        console = new Scanner(System.in);
+        do {
+             System.out.println("\n\nEasyGift 1.0");
+                System.out.println("---------");
+                System.out.println("> Início - Autenticado");
+
+                System.out.println("\n0 - Sair");
+                System.out.println("1 - Adicionar Lista");
+                System.out.println("2 - Remover Lista");
+                System.out.println("3 - Ver Listas");
+
+                System.out.print("\nOpção: ");
+            opcao = console.nextInt();
+
+            switch (opcao) {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                default:
+                    break;
+            }
+        } while(opcao != 0);
     }
 }

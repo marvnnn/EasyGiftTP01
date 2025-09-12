@@ -3,11 +3,13 @@ package Entidades;
 import java.time.LocalDate;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import aed3.*;
 
-public class Lista {
+public class Lista implements Registro{
     private int id;
-    private int idUsuario;
     private String name;
     private String description;
     private LocalDate createDate;
@@ -29,7 +31,27 @@ public class Lista {
         this.endDate = endDate;
     }
 
-    public byte[] toByteArray() throws Exception {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void fromByteArray(byte[] b) throws IOException {
+        ByteArrayInputStream bais = new ByteArrayInputStream(b);
+        DataInputStream dis = new DataInputStream(bais);
+
+        this.id = dis.readInt();
+        this.name = dis.readUTF();
+        this.description = dis.readUTF();
+
+        // Reconstruindo as datas a partir do epochDay gravado como int
+        this.createDate = java.time.LocalDate.ofEpochDay(dis.readInt());
+        this.endDate = java.time.LocalDate.ofEpochDay(dis.readInt());
+
+        dis.close();
+        bais.close();
+    }
+
+    public byte[] toByteArray() throws java.io.IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
         dos.writeInt(id);

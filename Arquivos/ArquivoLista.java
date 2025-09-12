@@ -1,13 +1,14 @@
 package Arquivos;
 
-import aed3.*;
-import java.io.RandomAccessFile;
 import Entidades.*;
 import java.io.*;
 
-import Entidades.Usuario;
+import aed3.Arquivo;
+import aed3.HashExtensivel;
+import aed3.ParCPFID;
 
-public class ArquivoLista extends Arquivo{
+
+public class ArquivoLista extends Arquivo<Lista>{
     RandomAccessFile arquivo;
 
     public ArquivoLista() throws Exception {
