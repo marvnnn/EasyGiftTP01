@@ -66,32 +66,25 @@ public class Arquivo<T extends Registro> {
     }
 
     public T read(int id) throws Exception {
-
-        System.out.println("entrou");
         T obj;
         short tam;
         byte[] b;
         byte lapide;
 
         ParIDEndereco pid = indiceDireto.read(id);
-        // if (pid != null) {
-        arquivo.seek(pid.getEndereco());
-        obj = construtor.newInstance();
-        lapide = arquivo.readByte();
-        // if (lapide == ' ') {
-        tam = arquivo.readShort();
-        b = new byte[tam];
-        arquivo.read(b);
-
-        System.out.println("Depuração do registro:");
-        System.out.println("Lápide: " + (char) lapide);
-        System.out.println("Tamanho: " + tam);
-        System.out.println("Bytes: " + java.util.Arrays.toString(b));
-        obj.fromByteArray(b);
-        if (obj.getId() == id)
-            return obj;
-        // }
-        // }
+        if(pid!=null) {
+            arquivo.seek(pid.getEndereco());
+            obj = construtor.newInstance();
+            lapide = arquivo.readByte();
+            if(lapide==' ') {
+                tam = arquivo.readShort();
+                b = new byte[tam];
+                arquivo.read(b);
+                obj.fromByteArray(b);
+                if(obj.getId()==id)
+                    return obj;
+            }
+        }
         return null;
     }
 

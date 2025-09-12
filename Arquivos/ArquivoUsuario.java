@@ -31,16 +31,13 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
         return id;
     }
 
-    public Usuario readByCPF(String cpf) throws Exception {
+    public int readByCPF(String cpf) throws Exception {
         // cria um objeto "fake" só pra calcular a chave corretamente
         ParCPFID chaveBusca = new ParCPFID(cpf, -1);
 
         // busca no índice usando a chave (que vem de hashCode do ParCPFID)
         ParCPFID pci = indiceCPF.read(chaveBusca.hashCode());
 
-        if (pci != null) {
-            return read(pci.getId()); // não precisa do -1
-        }
-            return null;
+        return pci.getId();
     }
 }

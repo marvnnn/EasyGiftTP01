@@ -17,11 +17,12 @@ public class MenuUsuario {
 
     public MenuUsuario() throws Exception {
         arqUsu = new ArquivoUsuario();
+        console = new Scanner(System.in);
     }
 
     public Usuario buscarPorNomeESenha(String nome, String senha) throws Exception {
         int totalUsuarios = arqUsu.totalUsuariosNoArquivo();
-       System.out.println("totla de usuarios" + totalUsuarios);
+        System.out.println("totla de usuarios" + totalUsuarios);
         for (int id = 1; id <= totalUsuarios; id++) {
             Usuario u = arqUsu.read(id); // lê cada usuário pelo seu ID
             if (u != null && u.getName().trim().equalsIgnoreCase(nome.trim()) && u.getPasswordHash().trim().equals(senha.trim()))  {
@@ -31,23 +32,22 @@ public class MenuUsuario {
         return null; // usuário não encontrado
     }
 
-    public void logar() {
+    public void logar() throws Exception{
+        Usuario u = arqUsu.read(0);
+        System.out.println(u.getName());
+        // System.out.println("Digite o CPF cadastrado: ");
+        // String cpf = console.nextLine();
+        // System.out.println("Digite a senha: ");
+        // String senha = console.nextLine();
 
-        System.out.println("Digite o nome do usuário: ");
-        String name = console.nextLine();
-        System.out.println("Digite a senha: ");
-        String senha = console.nextLine();
-
-        try {
-            Usuario u = buscarPorNomeESenha(name, senha);
-            if (u != null) {
-                System.out.println("Login bem sucedido! Bem-vindo, " + u.getName());
-            } else {
-                System.out.println("Nome de usuário ou senha incorretos.");
-            }
-            System.out.println("Não foi possivel efetuar o login.");
-            return;
-        }
+        // int id = arqUsu.readByCPF(cpf);
+        //     Usuario u = arqUsu.read(id-1);
+        //     if (u != null) {
+        //         System.out.println("Login bem sucedido! Bem-vindo, " + u.getName());
+        //     } else {
+        //         System.out.println("Nome de usuário ou senha incorretos.");
+        //     }
+        //     System.out.println("Não foi possivel efetuar o login.");
     }
 
     public void registrar() {
