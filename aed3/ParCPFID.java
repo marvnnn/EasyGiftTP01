@@ -1,3 +1,5 @@
+package aed3;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -79,5 +81,11 @@ public class ParCPFID implements aed3.RegistroHashExtensivel<ParCPFID> {
         return Math.abs(hashValue);
     }
 
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        ParCPFID other = (ParCPFID) obj;
+        return this.cpf.equals(other.cpf);
+    }
 
 }

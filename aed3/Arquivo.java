@@ -10,6 +10,7 @@ public class Arquivo<T extends Registro> {
     String nomeArquivo;
     Constructor<T> construtor;
     HashExtensivel<ParIDEndereco> indiceDireto;
+    HashExtensivel<ParCPFID> indiceCPF;
 
     public Arquivo(String na, Constructor<T> c) throws Exception {
         File d = new File(".\\dados");

@@ -25,6 +25,10 @@ public class Usuario implements Registro  {
         return passwordHash;
     }
 
+    public String getCPF() {
+        return this.cpf;
+    }
+
     public Usuario() {
         this(-1, "","", "", "", "", "");
     }

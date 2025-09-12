@@ -372,6 +372,7 @@ public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
     }
     create(elem); // insere o nome elemento
     return true;
+    
 
   }
 
