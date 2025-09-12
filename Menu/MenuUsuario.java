@@ -1,6 +1,7 @@
 package Menu;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import Arquivos.ArquivoUsuario;
@@ -20,7 +21,7 @@ public class MenuUsuario {
 
     public Usuario buscarPorNomeESenha(String nome, String senha) throws Exception {
         int totalUsuarios = arqUsu.totalUsuariosNoArquivo();
-        System.out.println("totla de usuarios" + totalUsuarios);
+       System.out.println("totla de usuarios" + totalUsuarios);
         for (int id = 1; id <= totalUsuarios; id++) {
             Usuario u = arqUsu.read(id); // lê cada usuário pelo seu ID
             if (u != null && u.getName().trim().equalsIgnoreCase(nome.trim()) && u.getPasswordHash().trim().equals(senha.trim()))  {
@@ -30,25 +31,22 @@ public class MenuUsuario {
         return null; // usuário não encontrado
     }
 
-    public boolean logar() throws Exception{
-        console = new Scanner(System.in);
-        System.out.println("Digite o CPF cadastrado: ");
-        String cpf = console.nextLine();
-        if(cpf.length() != 11) {
-            throw new Exception("CPF digitado inválido.");
-        }
-        else {
-            System.out.println("Digite a senha: ");
-            String senha = console.nextLine();
-            Usuario u = arqUsu.readByCPF(cpf);
-            
-            if(u.getPasswordHash().equals(senha)) {
-                System.out.println("Login realizado com sucesso!");
-                console.close();
-                return true;
+    public void logar() {
+
+        System.out.println("Digite o nome do usuário: ");
+        String name = console.nextLine();
+        System.out.println("Digite a senha: ");
+        String senha = console.nextLine();
+
+        try {
+            Usuario u = buscarPorNomeESenha(name, senha);
+            if (u != null) {
+                System.out.println("Login bem sucedido! Bem-vindo, " + u.getName());
+            } else {
+                System.out.println("Nome de usuário ou senha incorretos.");
             }
             System.out.println("Não foi possivel efetuar o login.");
-            return false;
+            return;
         }
     }
 
