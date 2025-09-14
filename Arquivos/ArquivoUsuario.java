@@ -27,7 +27,7 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
     public int create(Usuario u) throws Exception {
         int id = super.create(u); // grava no arquivo principal e índice direto
         
-        indiceCPF.create(new ParCPFID(u.getCPF(), id)); // grava no índice CPF
+        //indiceCPF.create(new ParCPFID(u.getCPF(), id)); // grava no índice CPF
         return id;
     }
 

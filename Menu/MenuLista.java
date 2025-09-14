@@ -12,7 +12,7 @@ public class MenuLista {
     private Scanner console;
 
     public MenuLista() {
-        arqList = new ArquivoLista();
+        //arqList = new ArquivoLista();
         console = new Scanner(System.in);
     }
 

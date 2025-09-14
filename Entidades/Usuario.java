@@ -5,88 +5,145 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import aed3.*;
 
-public class Usuario implements Registro  {
+public class Usuario implements Registro {
     private int id;
-    private String cpf;
-    private String passwordHash;
-    private String name;
+    private String nome;
     private String email;
-    private String secretQuestion;
-    private String secretAnswer;
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public String getCPF() {
-        return this.cpf;
-    }
+    private String hashSenha;
+    private String perguntaSecreta;
+    private String respostaSecreta;
 
     public Usuario() {
-        this(-1, "","", "", "", "", "");
+        this.id = -1;
+        this.nome = "";
+        this.email = "";
+        this.hashSenha = "";
+        this.perguntaSecreta = "";
+        this.respostaSecreta = "";
     }
 
-    public Usuario(String cpf, String passwordHash, String name, String email, String secretQuestion, String secretAnswer) {
-        this(-1, cpf, passwordHash, name, email, secretQuestion, secretAnswer);
-    }
-
-    public Usuario(int id, String cpf, String passwordHash, String name, String email, String secretQuestion, String secretAnswer) {
-        if(cpf.length() != 11) {
-            throw new RuntimeException("CPF inválido.");
-        }
-        this.id = id;
-        this.cpf = cpf;
-        this.passwordHash = passwordHash;
-        this.name = name;
+    public Usuario(String nome, String email, String senha, String perguntaSecreta, String respostaSecreta) {
+        this.id = -1;
+        this.nome = nome;
         this.email = email;
-        this.secretQuestion = secretQuestion;
-        this.secretAnswer = secretAnswer;
+        this.hashSenha = gerarHashSenha(senha);
+        this.perguntaSecreta = perguntaSecreta;
+        this.respostaSecreta = respostaSecreta;
     }
 
-    public byte[] toByteArray() throws java.io.IOException {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getHashSenha() {
+        return hashSenha;
+    }
+
+    public void setHashSenha(String hashSenha) {
+        this.hashSenha = hashSenha;
+    }
+
+    public String getPerguntaSecreta() {
+        return perguntaSecreta;
+    }
+
+    public void setPerguntaSecreta(String perguntaSecreta) {
+        this.perguntaSecreta = perguntaSecreta;
+    }
+
+    public String getRespostaSecreta() {
+        return respostaSecreta;
+    }
+
+    public void setRespostaSecreta(String respostaSecreta) {
+        this.respostaSecreta = respostaSecreta;
+    }
+
+    public boolean verificarSenha(String senha) {
+        return this.hashSenha.equals(gerarHashSenha(senha));
+    }
+
+    public void alterarSenha(String novaSenha) {
+        this.hashSenha = gerarHashSenha(novaSenha);
+    }
+
+    private String gerarHashSenha(String senha) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(senha.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Erro ao gerar hash da senha", e);
+        }
+    }
+
+    @Override
+    public byte[] toByteArray() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
+        
         dos.writeInt(this.id);
-        dos.write(this.cpf.getBytes());
-        dos.writeUTF(this.passwordHash);
-        dos.writeUTF(this.name);
+        dos.writeUTF(this.nome);
         dos.writeUTF(this.email);
-        dos.writeUTF(this.secretQuestion);
-        dos.writeUTF(this.secretAnswer);
+        dos.writeUTF(this.hashSenha);
+        dos.writeUTF(this.perguntaSecreta);
+        dos.writeUTF(this.respostaSecreta);
+        
         return baos.toByteArray();
     }
 
-   public void fromByteArray(byte[] b) throws IOException {
-        ByteArrayInputStream bais = new ByteArrayInputStream(b);
+    @Override
+    public void fromByteArray(byte[] ba) throws IOException {
+        ByteArrayInputStream bais = new ByteArrayInputStream(ba);
         DataInputStream dis = new DataInputStream(bais);
-
-        //byte[] cpf = new byte[11];
-        this.id              = dis.readInt();
-        this.name            = dis.readUTF();
-        this.cpf             = dis.readUTF();
-        this.passwordHash    = dis.readUTF();
-        this.email           = dis.readUTF();
-        this.secretQuestion  = dis.readUTF();
-        this.secretAnswer    = dis.readUTF();
+        
+        this.id = dis.readInt();
+        this.nome = dis.readUTF();
+        this.email = dis.readUTF();
+        this.hashSenha = dis.readUTF();
+        this.perguntaSecreta = dis.readUTF();
+        this.respostaSecreta = dis.readUTF();
     }
 
-
-    public void setId(int i) {
-        this.id = i;
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                ", perguntaSecreta='" + perguntaSecreta + '\'' +
+                '}';
     }
-   
-
-    public int getId() {
-        return this.id;
-    }
-
-
-    
 }
