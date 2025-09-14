@@ -5,7 +5,6 @@ import java.io.*;
 
 import aed3.Arquivo;
 import aed3.HashExtensivel;
-import aed3.ParCPFID;
 
 
 public class ArquivoLista extends Arquivo<Lista>{

@@ -6,21 +6,21 @@ import java.io.*;
 import Entidades.Usuario;
 import aed3.Arquivo;
 import aed3.HashExtensivel;
-import aed3.ParCPFID;
+import aed3.ParEmailID;
 
 public class ArquivoUsuario extends Arquivo<Usuario> {
 
-    public HashExtensivel<ParCPFID> indiceCPF;
+    public HashExtensivel<ParEmailID> indiceEmail;
 
     public ArquivoUsuario() throws Exception {
         super("usuario", Usuario.class.getConstructor());
 
         // inicializa índice CPF → ID
-        indiceCPF = new HashExtensivel<>(
-            ParCPFID.class.getConstructor(),
+        indiceEmail = new HashExtensivel<>(
+            ParEmailID.class.getConstructor(),
             4,
-            "usuario.cpf.idx",
-            "usuario.cpf.bkt"
+            ".\\Dados\\usuario\\usuario_Email.d.db",
+            ".\\Dados\\usuario\\usuario_Email.c.db"
         );
     }
 
@@ -29,15 +29,5 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
         
         //indiceCPF.create(new ParCPFID(u.getCPF(), id)); // grava no índice CPF
         return id;
-    }
-
-    public int readByCPF(String cpf) throws Exception {
-        // cria um objeto "fake" só pra calcular a chave corretamente
-        ParCPFID chaveBusca = new ParCPFID(cpf, -1);
-
-        // busca no índice usando a chave (que vem de hashCode do ParCPFID)
-        ParCPFID pci = indiceCPF.read(chaveBusca.hashCode());
-
-        return pci.getId();
     }
 }
