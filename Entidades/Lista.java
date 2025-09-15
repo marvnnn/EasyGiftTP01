@@ -131,6 +131,7 @@ public class Lista implements Registro {
             dos.writeBoolean(false);
         }
         dos.writeUTF(this.codigoCompartilhavel);
+        dos.writeUTF(this.nomeAutor);
         dos.writeInt(this.idUsuario);
         
         return baos.toByteArray();
@@ -151,6 +152,7 @@ public class Lista implements Registro {
             this.dataLimite = null;
         }
         this.codigoCompartilhavel = dis.readUTF();
+        this.nomeAutor = dis.readUTF();
         this.idUsuario = dis.readInt();
     }
 

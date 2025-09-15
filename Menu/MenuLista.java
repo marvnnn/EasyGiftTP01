@@ -8,16 +8,30 @@ import Arquivos.ArquivoLista;
 import Arquivos.ArquivoUsuario;
 import Entidades.Lista;
 import Entidades.Usuario;
+import aed3.HashExtensivel;
+import aed3.ParCID;
+import aed3.ArvoreBMais;
+import aed3.ParUsuarioLista;
 
 public class MenuLista {
     private ArquivoLista arqList;
     private ArquivoUsuario arqUsu;
     private Scanner console;
+    private HashExtensivel<ParCID> iCode;
+    private ArvoreBMais<ParUsuarioLista> arvoreLista;
 
     public MenuLista() throws Exception {
         arqUsu = new ArquivoUsuario();
         arqList = new ArquivoLista();
         console = new Scanner(System.in);
+        iCode = new HashExtensivel<>(ParCID.class.getConstructor(), 
+        4, 
+        ".\\Dados\\lista\\listaCodigo.d.db", 
+        ".\\Dados\\lista\\listaCodigo.c.db");
+
+        arvoreLista = new ArvoreBMais<>(ParUsuarioLista.class.getConstructor(), 
+        4, 
+        ".\\Dados\\lista\\arvore_usuario_lista.db");
     }
 
     // Criar lista
@@ -44,7 +58,9 @@ public class MenuLista {
         }
 
         Lista lista = new Lista(nomeList, desq, dataExclusao, u.getNome(), idUsuario);
-        int id = arqList.create(lista);
+        int id = arqList.create(lista);     
+        iCode.create(new ParCID(lista.getCodigoCompartilhavel(), id));
+        arvoreLista.create(new ParUsuarioLista(lista.getIdUsuario(), id));
  
         System.out.println("\nLista criada com sucesso! (ID = " + id + ")");
     }
@@ -80,7 +96,7 @@ public class MenuLista {
 
     public int listarListas(int idUsuario) throws Exception {
         System.out.println("\n\n---------");
-        System.out.println("> Listas > Todas as Listas\n");
+        System.out.println("> Listas > Todas as Listas");
         System.out.println("---------");
 
         int count = 0;
@@ -131,12 +147,14 @@ public class MenuLista {
         System.out.println("Nome atual: " + lista.getNome());
         System.out.print("Novo nome (ou Enter p/ manter): ");
         String novoNome = console.nextLine();
+        console.nextLine();
         if (!novoNome.isEmpty())
             lista.setNome(novoNome);
 
         System.out.println("Descrição atual: " + lista.getDescricao());
         System.out.print("Nova descrição (ou Enter p/ manter): ");
         String novaDesc = console.nextLine();
+        console.nextLine();
         if (!novaDesc.isEmpty())
             lista.setDescricao(novaDesc);
 
@@ -162,10 +180,20 @@ public class MenuLista {
 
     // Excluir lista
     public void excluirLista(int id) throws Exception {
-        if (arqList.delete(id)) {
-            System.out.println("\n✅ Lista excluída com sucesso!");
+        Lista lista = arqList.read(id);
+        if (lista != null) {
+            iCode.delete(lista.getCodigoCompartilhavel().hashCode());
+            arvoreLista.delete(new ParUsuarioLista(lista.getIdUsuario(), id));
+            boolean resp = arqList.delete(id);
+
+            if(resp) {
+                System.out.println("Lista excluída com sucesso! ");
+            }
+            else {
+                System.out.println("Não foi possível excluir sua Lista, tente novamente mais tarde.");
+            }
         } else {
-            System.out.println("\n⚠️ Lista não encontrada.");
+            System.out.println("\nLista não encontrada.");
         }
     }
 }

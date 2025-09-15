@@ -6,17 +6,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class ParIDID implements RegistroHashExtensivel<ParIDID> {
+public class ParCID implements RegistroHashExtensivel<ParCID> {
     private String codigo;  // chave
     private int id;         // valor
     private final short TAMANHO = 16;  // tamanho fixo em bytes (10 caracteres + 4 bytes para int)
 
-    public ParIDID() {
+    public ParCID() {
         this.codigo = "";
         this.id = -1;
     }
 
-    public ParIDID(String codigo, int id) {
+    public ParCID(String codigo, int id) {
         this.codigo = codigo;
         this.id = id;
     }

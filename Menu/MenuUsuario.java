@@ -36,11 +36,10 @@ public class MenuUsuario {
 
         if (u != null && u.verificarSenha(senha)) {
             System.out.println("Login bem sucedido! Bem-vindo, " + u.getNome());
+            menuUsuario();
         } else {
             System.out.println("Nome de usuário ou senha incorretos.");
         }
-
-        menuUsuario();
     }
 
     public void registrar() {
@@ -89,7 +88,7 @@ public class MenuUsuario {
             int id;
 
             switch (opcao) {
-                case 0:
+                case 0: System.out.println("\nDeslogando...\n");
                     break;
                 case 1: menuLista.criarLista(idUsuario); 
                     break;
@@ -100,14 +99,15 @@ public class MenuUsuario {
                 case 4: id = menuLista.listarListasUsuario(idUsuario); menuLista.verLista(id);
                     break;
                 case 5: id = menuLista.listarListas(opcao); menuLista.verLista(id);
-                case 5: atualizarSenha();
                     break;
-                case 6: deletarUsuario();
+                case 6: atualizarSenha();
+                    break;
+                case 7: deletarUsuario();
                     break;
                 default:
                     break;
             }
-        } while (opcao != 0 && opcao != 6);
+        } while (opcao != 0 && opcao != 7 && opcao != 6);
     }
 
     public void atualizarSenha()  throws Exception{
