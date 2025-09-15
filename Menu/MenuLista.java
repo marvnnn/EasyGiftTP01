@@ -3,7 +3,6 @@ package Menu;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-import java.util.ArrayList;
 
 import Arquivos.ArquivoLista;
 import Entidades.Lista;
@@ -18,18 +17,16 @@ public class MenuLista {
     }
 
     // Criar lista
-    public int criarLista(int idUsuario) throws Exception {
-        System.out.println("\n\nEasyGift 1.0");
-        System.out.println("---------");
-        System.out.println("> Criação de Lista");
+    public void criarLista(int idUsuario) throws Exception {
+        System.out.println("\n--- Criação de Lista ---");
 
-        System.out.print("\nDigite o nome da lista: ");
+        System.out.print("Nome da lista: ");
         String nomeList = console.nextLine();
 
-        System.out.print("Digite a descrição da lista: ");
+        System.out.print("Descrição da lista: ");
         String desq = console.nextLine();
 
-        System.out.print("Digite quando a lista deverá ser excluída (DD/MM/AAAA): ");
+        System.out.print("Data de exclusão (DD/MM/AAAA): ");
         String dataStr = console.nextLine();
 
         LocalDate dataExclusao;
@@ -42,14 +39,56 @@ public class MenuLista {
         }
 
         Lista lista = new Lista(nomeList, desq, dataExclusao, idUsuario);
-
         int id = arqList.create(lista);
 
         System.out.println("\n✅ Lista criada com sucesso! (ID = " + id + ")");
-        return id;
     }
 
-    // Ler lista
+    public void listarListas(int idUsuario) throws Exception {
+        System.out.println("\nPresenteFácil 1.0");
+        System.out.println("-----------------");
+        System.out.println("> Início > Minhas listas\n");
+
+        System.out.println("LISTAS");
+
+        int count = 0;
+        int index = 1; // contador para exibição numerada
+
+        for (int i = 0; i < arqList.tamanho(); i++) {
+            Lista lista = arqList.read(i + 1); // IDs começam em 1
+            if (lista != null && lista.getIdUsuario() == idUsuario) {
+                String dataStr = lista.getDataLimite() != null
+                        ? lista.getDataLimite().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                        : "Sem data limite";
+                System.out.println("(" + index + ") " + lista.getNome() + " - " + dataStr);
+                index++;
+                count++;
+            }
+        }
+
+        if (count == 0) {
+            System.out.println("Você não possui listas cadastradas.");
+        }
+
+        System.out.println("\n(N) Nova lista");
+        System.out.println("(R) Retornar ao menu anterior");
+
+        System.out.print("\nOpção: ");
+        String opcao = console.nextLine();
+
+        switch (opcao.toUpperCase()) {
+            case "N":
+                criarLista(idUsuario);
+                break;
+            case "R":
+                return;
+            default:
+                System.out.println("Opção inválida!");
+                break;
+        }
+    }
+
+    // Ver detalhes de uma lista
     public void verLista(int id) throws Exception {
         Lista lista = arqList.read(id);
         if (lista != null) {
@@ -60,7 +99,7 @@ public class MenuLista {
         }
     }
 
-    // Atualizar lista
+    // Editar lista
     public void editarLista(int id) throws Exception {
         Lista lista = arqList.read(id);
         if (lista == null) {
@@ -72,12 +111,14 @@ public class MenuLista {
         System.out.println("Nome atual: " + lista.getNome());
         System.out.print("Novo nome (ou Enter p/ manter): ");
         String novoNome = console.nextLine();
-        if (!novoNome.isEmpty()) lista.setNome(novoNome);
+        if (!novoNome.isEmpty())
+            lista.setNome(novoNome);
 
         System.out.println("Descrição atual: " + lista.getDescricao());
         System.out.print("Nova descrição (ou Enter p/ manter): ");
         String novaDesc = console.nextLine();
-        if (!novaDesc.isEmpty()) lista.setDescricao(novaDesc);
+        if (!novaDesc.isEmpty())
+            lista.setDescricao(novaDesc);
 
         System.out.println("Data limite atual: " + lista.getDataLimite());
         System.out.print("Nova data limite (DD/MM/AAAA ou Enter p/ manter): ");
@@ -104,50 +145,7 @@ public class MenuLista {
         if (arqList.delete(id)) {
             System.out.println("\n✅ Lista excluída com sucesso!");
         } else {
-            System.out.println("\n⚠️ Erro: Lista não encontrada.");
+            System.out.println("\n⚠️ Lista não encontrada.");
         }
-    }
-
-    // Menu principal
-    public void menuListas(int idUsuario) throws Exception {
-        int opcao;
-        do {
-            System.out.println("\n\nEasyGift 1.0");
-            System.out.println("---------");
-            System.out.println("> Minhas Listas");
-            System.out.println("1 - Criar Lista");
-            System.out.println("2 - Ver Lista");
-            System.out.println("3 - Editar Lista");
-            System.out.println("4 - Excluir Lista");
-            System.out.println("0 - Voltar");
-
-            System.out.print("\nOpção: ");
-            opcao = Integer.parseInt(console.nextLine());
-
-            switch (opcao) {
-                case 1:
-                    criarLista(idUsuario);
-                    break;
-                case 2:
-                    System.out.print("Digite o ID da lista: ");
-                    int idVer = Integer.parseInt(console.nextLine());
-                    verLista(idVer);
-                    break;
-                case 3:
-                    System.out.print("Digite o ID da lista: ");
-                    int idEdit = Integer.parseInt(console.nextLine());
-                    editarLista(idEdit);
-                    break;
-                case 4:
-                    System.out.print("Digite o ID da lista: ");
-                    int idDel = Integer.parseInt(console.nextLine());
-                    excluirLista(idDel);
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("⚠️ Opção inválida!");
-            }
-        } while (opcao != 0);
     }
 }

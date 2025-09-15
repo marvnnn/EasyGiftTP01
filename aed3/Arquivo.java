@@ -275,4 +275,20 @@ public class Arquivo<T extends Registro> {
         }
     }
 
+    // Retorna a quantidade de registros válidos no arquivo
+    public int tamanho() throws Exception {
+        int total = 0;
+        arquivo.seek(TAM_CABECALHO); // pula o cabeçalho
+        while (arquivo.getFilePointer() < arquivo.length()) {
+            byte lapide = arquivo.readByte();
+            short tam = arquivo.readShort();
+            if (lapide == ' ') { // registro válido
+                total++;
+            }
+            arquivo.skipBytes(tam); // pula os bytes do registro
+        }
+        return total;
+    }
+
+
 }
