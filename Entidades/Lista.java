@@ -16,6 +16,7 @@ public class Lista implements Registro {
     private LocalDate dataCriacao;
     private LocalDate dataLimite;
     private String codigoCompartilhavel;
+    private String nomeAutor;
     private int idUsuario;
 
     public Lista() {
@@ -24,17 +25,19 @@ public class Lista implements Registro {
         this.descricao = "";
         this.dataCriacao = LocalDate.now();
         this.dataLimite = null;
+        this.nomeAutor = "";
         this.codigoCompartilhavel = "";
         this.idUsuario = -1;
     }
 
-    public Lista(String nome, String descricao, LocalDate dataLimite, int idUsuario) {
+    public Lista(String nome, String descricao, LocalDate dataLimite, String nomeAutor, int idUsuario) {
         this.id = -1;
         this.nome = nome;
         this.descricao = descricao;
         this.dataCriacao = LocalDate.now();
         this.dataLimite = dataLimite;
         this.codigoCompartilhavel = gerarCodigoCompartilhavel();
+        this.nomeAutor = nomeAutor;
         this.idUsuario = idUsuario;
     }
 
@@ -56,6 +59,14 @@ public class Lista implements Registro {
 
     public String getDescricao() {
         return descricao;
+    }
+
+    public String getNomeAutor() {
+        return this.nomeAutor;
+    }
+
+    public void setNomeAutor(String nomeAutor) {
+        this.nomeAutor = nomeAutor;
     }
 
     public void setDescricao(String descricao) {
