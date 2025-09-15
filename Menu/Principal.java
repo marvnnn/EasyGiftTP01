@@ -4,9 +4,8 @@ import java.util.Scanner;
 
 public class Principal {
     public static void main(String[] args) {
-
+        Scanner console = new Scanner(System.in);
         try {
-            Scanner scanner = new Scanner(System.in);
             MenuUsuario menuUsu = new MenuUsuario();
 
             int option;
@@ -20,7 +19,7 @@ public class Principal {
                 System.out.println("2 - Registrar-se");
 
                 System.out.print("\nOpção: ");
-                option = Integer.parseInt(scanner.nextLine());
+                option = Integer.parseInt(console.nextLine());
 
                 switch (option) {
                     case 0:
@@ -42,5 +41,6 @@ public class Principal {
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
         }
+        console.close();
     }
 }
