@@ -42,8 +42,10 @@ public class MenuLista {
         Usuario u = arqUsu.read(idUsuario);
         System.out.println("\n\n\n---------");
         System.out.println("> Listas - Criação de Listas");        
-        System.out.println("Nome da Lista: ");
+        System.out.print("Nome da Lista: ");
+        console.nextLine();
         String nomeList = console.nextLine();
+        
 
         System.out.print("Descrição da Lista: ");
         String desq = console.nextLine();
@@ -135,7 +137,11 @@ public class MenuLista {
         Lista lista = arqList.read(id);
         if (lista != null) {
             System.out.println("\n--- Detalhes da Lista ---");
-            System.out.println(lista);
+            System.out.println("Nome: " + lista.getNome());
+            System.out.println("Descrição: " + lista.getDescricao());
+            System.out.println("Data de Criação: " + lista.getDataCriacao());
+            System.out.println("Data de Encerramento: " + lista.getDataLimite());
+            System.out.println("Código compartilhável: " + lista.getCodigoCompartilhavel());
         } else {
             System.out.println("\nLista não encontrada.");
         }
@@ -200,5 +206,71 @@ public class MenuLista {
         } else {
             System.out.println("\nLista não encontrada.");
         }
+    }
+
+    public void menu(int idUsuario) throws Exception{
+        console = new Scanner(System.in);
+        int opcao;
+        do {
+            System.out.println("\n\nEasyGift 1.0");
+            System.out.println("---------");
+            System.out.println("> Listas - Autenticado");
+            System.out.println("\n0 - Voltar");
+            System.out.println("1 - Criar Lista");
+            System.out.println("2 - Buscar Lista");
+            System.out.println("3 - Excluir Lista");
+            System.out.println("4 - Ver minhas Listas");
+            System.out.print("\nOpção: ");
+
+            opcao = console.nextInt();
+            int id;
+
+            switch (opcao) {
+                case 0:
+                    System.out.println("Voltando...");
+                    break;
+                case 1: criarLista(idUsuario);
+                    break;
+                case 2: buscarLista();
+                    break;
+                case 3: id = listarListasUsuario(idUsuario); excluirLista(id);
+                    break;
+                case 4: id = listarListasUsuario(idUsuario); verLista(id);
+                    break;
+                default:
+                    break;
+            }
+        } while(opcao != 0);
+    }
+
+    public void buscarLista() throws Exception {
+        console = new Scanner(System.in);
+        System.out.println("\n\n---------");
+        System.out.println("> Listas - Buscar Lista");
+        System.out.print("Digite o código compartilhável: ");
+        String codigoComp = console.nextLine();
+        try {
+            ParCID pcid = iCode.read(new ParCID(codigoComp, -1).hashCode());
+            if(pcid != null) {
+                Lista lista = arqList.read(pcid.getId());
+                if(lista != null) {
+                    System.out.println("Lista encontrada!");
+                    mostrarLista(lista);
+                }
+            }
+        } catch(Exception e) {
+            System.out.println("Código inválido.");
+        };
+
+    }
+
+    public void mostrarLista(Lista lista) {
+        console = new Scanner(System.in);
+        System.out.println("Nome da Lista: " + lista.getNome());
+        System.out.println("Nome do Criador: " + lista.getNomeAutor());
+        System.out.println("Descrição: " + lista.getDescricao());
+        System.out.println("Data de Encerramento: " + lista.getDataLimite());
+        System.out.println("\nAperte ENTER para voltar. ");
+        console.nextLine();
     }
 }

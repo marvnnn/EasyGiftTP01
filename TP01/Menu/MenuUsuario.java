@@ -30,23 +30,26 @@ public class MenuUsuario {
         System.out.println("Digite a senha: ");
         String senha = console.nextLine();
 
-        ParEmailID par = indiceEmail.read(email.hashCode());
-        idUsuario = par.getId();
-        Usuario u = arqUsu.read(idUsuario);
-
-        if (u != null && u.verificarSenha(senha)) {
+        try {
+            ParEmailID par = indiceEmail.read(email.hashCode());
+            idUsuario = par.getId();
+            Usuario u = arqUsu.read(idUsuario);
+            if (u != null && u.verificarSenha(senha)) {
             System.out.println("Login bem sucedido! Bem-vindo, " + u.getNome());
             menuUsuario();
         } else {
             System.out.println("Nome de usuário ou senha incorretos.");
         }
+        } catch(Exception e) {
+           System.out.println("E-mail ou senha inválido."); 
+        };
     }
 
     public void registrar() {
         console = new Scanner(System.in);
         System.out.println("Digite o nome do usuário: ");
         String name = console.nextLine();
-        System.out.println("Digite o email: ");
+        System.out.println("Digite o e-mail: ");
         String email = console.nextLine();
         System.out.println("Digite a senha: ");
         String senha = console.nextLine();
@@ -56,6 +59,7 @@ public class MenuUsuario {
         String resposta = console.nextLine();
 
         Usuario u = new Usuario(name, email, senha, pergunta, resposta);
+
         try {
             int id = arqUsu.create(u);
             indiceEmail.create(new ParEmailID(email,id));
@@ -74,40 +78,26 @@ public class MenuUsuario {
             System.out.println("> Início - Autenticado");
 
             System.out.println("\n0 - Sair");
-            System.out.println("1 - Criar Lista");
-            System.out.println("2 - Editar Lista");
-            System.out.println("3 - Remover Lista");
-            System.out.println("4 - Ver minhas Listas");
-            System.out.println("5 - Ver Listas");
-            System.out.println("6 - Alterar Senha");
-            System.out.println("7 - Deletar Usuário");
+            System.out.println("1 - Menu Listas");
+            System.out.println("2 - Alterar Senha");
+            System.out.println("3 - Deletar Usuário");
 
             System.out.print("\nOpção: ");
             opcao = console.nextInt();
 
-            int id;
-
             switch (opcao) {
                 case 0: System.out.println("\nDeslogando...\n");
                     break;
-                case 1: menuLista.criarLista(idUsuario); 
+                case 1: menuLista.menu(idUsuario);
                     break;
-                case 2: id = menuLista.listarListasUsuario(idUsuario); menuLista.editarLista(id);
+                case 2: atualizarSenha();
                     break;
-                case 3: id = menuLista.listarListasUsuario(idUsuario); menuLista.excluirLista(id);
-                    break;
-                case 4: id = menuLista.listarListasUsuario(idUsuario); menuLista.verLista(id);
-                    break;
-                case 5: id = menuLista.listarListas(opcao); menuLista.verLista(id);
-                    break;
-                case 6: atualizarSenha();
-                    break;
-                case 7: deletarUsuario();
+                case 3: deletarUsuario();
                     break;
                 default:
                     break;
             }
-        } while (opcao != 0 && opcao != 7 && opcao != 6);
+        } while (opcao != 0 && opcao != 2 && opcao != 3);
     }
 
     public void atualizarSenha()  throws Exception{
