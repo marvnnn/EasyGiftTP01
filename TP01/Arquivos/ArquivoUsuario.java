@@ -1,8 +1,5 @@
 package Arquivos;
 
-import Entidades.*;
-import java.io.*;
-
 import Entidades.Usuario;
 import aed3.Arquivo;
 import aed3.HashExtensivel;

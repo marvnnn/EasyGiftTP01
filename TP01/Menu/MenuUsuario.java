@@ -1,12 +1,8 @@
 package Menu;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
-
 import Arquivos.ArquivoUsuario;
 import Entidades.Usuario;
-import Entidades.Lista;
 import aed3.*;
 
 public class MenuUsuario {
@@ -105,33 +101,37 @@ public class MenuUsuario {
         System.out.println("\n\nEasyGift 1.0");
         System.out.println("---------");
         System.out.println("> Alteração de Senha - Autenticação de Segurança");
-        System.out.println("\nDigite o email cadastrado na sua conta: ");
+        System.out.println("Digite o email cadastrado na sua conta: ");
         String email = console.nextLine();
         System.out.println("Digite sua senha atual: ");
         String senha = console.nextLine();
 
-        ParEmailID par = indiceEmail.read(email.hashCode());
+        try {
+            ParEmailID par = indiceEmail.read(email.hashCode());
 
-        Usuario u = arqUsu.read(par.getId());
+            Usuario u = arqUsu.read(par.getId());
 
-        if(u != null && u.verificarSenha(senha)) {
-            System.out.println("Autenticação feita com sucesso!");
-            System.out.println("\n\nDigite sua nova senha: ");
-            String newSenha = console.nextLine();
-            u.alterarSenha(newSenha);
-            boolean resultado = arqUsu.update(u);
+            if(u != null && u.verificarSenha(senha)) {
+                System.out.println("Autenticação feita com sucesso!");
+                System.out.println("\n\nDigite sua nova senha: ");
+                String newSenha = console.nextLine();
+                u.alterarSenha(newSenha);
+                boolean resultado = arqUsu.update(u);
 
-            if(resultado) {
-                System.out.println("Senha atualizada com sucesso!");
+                if(resultado) {
+                    System.out.println("Senha atualizada com sucesso!");
+                }
+                else {
+                    System.out.println("Houve um problema ao atualizar sua senha, tente novamente.");
+                }
             }
             else {
-                System.out.println("Houve um problema ao atualizar sua senha, tente novamente.");
+                System.out.println("E-mail ou senha incorretos.");
             }
-        }
-        else {
+        } catch(Exception e) {
             System.out.println("E-mail ou senha incorretos.");
-        }
-
+        };
+        
     }
 
     public void deletarUsuario() throws Exception{
@@ -150,7 +150,7 @@ public class MenuUsuario {
 
         if(u != null && u.verificarSenha(senha)) {
             System.out.println("Verificação feita com sucesso!");
-            System.out.println("Você tem certeza que deseja excluir sua conta?(S/N)");
+            System.out.println("Você tem certeza que deseja excluir sua conta? (S/N)");
             String resp = console.nextLine();
             if(resp.equals("S")) {
                 boolean resposta = arqUsu.delete(par.getId());

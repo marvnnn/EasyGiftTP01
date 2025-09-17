@@ -3,10 +3,8 @@ package Menu;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
 import Arquivos.ArquivoLista;
 import Arquivos.ArquivoUsuario;
 import Entidades.Lista;
@@ -71,36 +69,36 @@ public class MenuLista {
     }
 
     public int listarListasUsuario(int idUsuario) throws Exception {
-    System.out.println("\n\n---------");
-    System.out.println("> Listas > Minhas Listas\n");
+        System.out.println("\n\n---------");
+        System.out.println("> Listas > Minhas Listas\n");
 
-    Map<Integer, Integer> mapaEscolhas = new HashMap<>();
-    int index = 1;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        Map<Integer, Integer> mapaEscolhas = new HashMap<>();
+        int index = 1;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    for (int i = 1; i <= arqList.tamanho(); i++) {
-        Lista lista = arqList.read(i);
-        if (lista != null && lista.getIdUsuario() == idUsuario) {
-            String dataStr = (lista.getDataLimite() != null)
-                    ? lista.getDataLimite().format(formatter)
-                    : "Sem data limite";
+        for (int i = 1; i <= arqList.tamanho(); i++) {
+            Lista lista = arqList.read(i);
+            if (lista != null && lista.getIdUsuario() == idUsuario) {
+                String dataStr = (lista.getDataLimite() != null)
+                        ? lista.getDataLimite().format(formatter)
+                        : "Sem data limite";
 
-            System.out.println("(" + index + ") " + lista.getNome() + " - " + dataStr);
-            mapaEscolhas.put(index, lista.getId());
-            index++;
+                System.out.println("(" + index + ") " + lista.getNome() + " - " + dataStr);
+                mapaEscolhas.put(index, lista.getId());
+                index++;
+            }
         }
+
+        if (mapaEscolhas.isEmpty()) {
+            System.out.println("Você não possui Listas cadastradas.");
+            return -1;
+        }
+
+        System.out.println("Digite a opção: ");
+        int escolha = console.nextInt();
+
+        return mapaEscolhas.getOrDefault(escolha, -1);
     }
-
-    if (mapaEscolhas.isEmpty()) {
-        System.out.println("Você não possui Listas cadastradas.");
-        return -1;
-    }
-
-    System.out.println("Digite a opção: ");
-    int escolha = console.nextInt();
-
-    return mapaEscolhas.getOrDefault(escolha, -1);
-}
 
     public int listarListas(int idUsuario) throws Exception {
         System.out.println("\n\n---------");
@@ -219,7 +217,8 @@ public class MenuLista {
             System.out.println("1 - Criar Lista");
             System.out.println("2 - Buscar Lista");
             System.out.println("3 - Excluir Lista");
-            System.out.println("4 - Ver minhas Listas");
+            System.out.println("4 - Editar Lista");
+            System.out.println("5 - Ver minhas Listas");
             System.out.print("\nOpção: ");
 
             opcao = console.nextInt();
@@ -235,7 +234,9 @@ public class MenuLista {
                     break;
                 case 3: id = listarListasUsuario(idUsuario); excluirLista(id);
                     break;
-                case 4: id = listarListasUsuario(idUsuario); verLista(id);
+                case 4: id = listarListasUsuario(idUsuario); editarLista(id);
+                    break;
+                case 5: id = listarListasUsuario(idUsuario); verLista(id);
                     break;
                 default:
                     break;

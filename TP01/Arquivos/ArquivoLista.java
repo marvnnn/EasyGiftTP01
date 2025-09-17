@@ -1,7 +1,6 @@
 package Arquivos;
 
 import Entidades.*;
-import java.io.*;
 import aed3.Arquivo;
 
 public class ArquivoLista extends Arquivo<Lista> {
