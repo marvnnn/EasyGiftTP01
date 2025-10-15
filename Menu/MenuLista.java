@@ -76,7 +76,7 @@ public class MenuLista {
         int index = 1;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        for (int i = 1; i <= arqList.tamanho(); i++) {
+        for (int i = 1; i <= arqList.tamanho()+1; i++) {
             Lista lista = arqList.read(i);
             if (lista != null && lista.getIdUsuario() == idUsuario) {
                 String dataStr = (lista.getDataLimite() != null)
